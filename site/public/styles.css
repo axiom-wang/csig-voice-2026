@@ -1,0 +1,532 @@
+/* ============================================================
+   CSIG 正发声 · AI 的加速度 —— 封面首页
+   分层校准结论（见 manifest.json 与 calibrate.py / calib-v2-left.png）：
+   - 底册 archive-base.png     1192×1320，内容 bbox [0,20,1192,1306]
+   - 封皮 archive-cover-v2.png  992×1080，内容 bbox [54,0,967,1080]
+     （2026-09-11 换图：AI 研究线索图案 + 「AI 的加速度」题字已生成在封皮上）
+   - 同一容器（1203×1320）内：底册 left:0 top:0；
+     封皮按内容高度对齐（scale 1.1907）后内容左上角对齐 → left:-64px top:20px，
+     右侧露出底册纸边与便签为预期效果（档案里夹着的纸条感）。
+   ============================================================ */
+
+:root {
+  --ink-cream: #ece1c6;          /* 封面主文字（米白） */
+  --ink-dim: rgba(207, 195, 166, .82);
+  --tech: #426bcc;               /* 研究线蓝 */
+  --warm: #ffd483;               /* 纸缝暖光 */
+  --bg-fallback: #0b1220;        /* 背景图失败时的底色 */
+  --paper-neutral: #eceae2;      /* 承接第一幕的中性打印纸色 */
+  --paper-ink: #34322b;          /* 中性纸面上的墨色 */
+
+  /* 档案设计坐标系（单位 px，按 --bs 整体缩放） */
+  --book-w: 1203px;
+  --book-h: 1320px;
+  --bs: .5;                      /* 由 JS 取景计算 */
+  --push: 2.35;                  /* 推近倍率，可在 CoverExperience.config 调 */
+  --openDur: 1500ms;             /* 展开时长 1200–1800 可调 */
+
+  /* 字体资产：@font-face、年代/角色 token 与手写 SVG 描边动画见 assets/fonts/fonts.css */
+  --font-serif: "Noto Serif SC", "Songti SC", "STSong", "Noto Serif CJK SC", "SimSun", serif;
+  --font-serif-la: "EB Garamond", "Noto Serif SC", "Songti SC", "STSong", serif;
+  --font-sans: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body { height: 100%; }
+html.cover-lock, html.cover-lock body { overflow: hidden; }
+
+body {
+  margin: 0;
+  background: var(--bg-fallback);
+  color: var(--ink-cream);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font: inherit; -webkit-tap-highlight-color: transparent; }
+
+/* ---------------- 封面根 ---------------- */
+.coverRoot {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+/* 背景层：略放大以容纳视差位移 */
+.bg {
+  position: absolute;
+  inset: -3.5%;
+  z-index: 0;
+  transition: filter var(--openDur) ease;
+}
+.bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  user-select: none;
+}
+.is-opening .bg { filter: brightness(.5) saturate(.85); }
+
+/* ---------------- 顶栏：左品牌 / 右活动入口 ---------------- */
+.topbar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: max(16px, 2.8vh) clamp(18px, 3.5vw, 44px) 0;
+  transition: opacity .3s ease;
+}
+.brand { flex: 0 0 auto; }
+.brandLogo {
+  display: block;
+  height: clamp(44px, 6.5vh, 72px);
+  width: auto;
+  user-select: none;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, .35));
+}
+@media (max-width: 480px) {
+  .brandLogo { height: 44px; }
+}
+.topActions {
+  display: flex;
+  gap: clamp(8px, 1vw, 14px);
+}
+.topAction {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.topAction img {
+  display: block;
+  height: clamp(52px, 7.2vh, 78px);
+  width: auto;
+  user-select: none;
+  transition: transform .25s ease, filter .25s ease;
+}
+.topAction:hover img {
+  transform: translateY(-2px);
+  filter: brightness(1.07) drop-shadow(0 4px 14px rgba(255, 205, 120, .28));
+}
+.topAction:focus-visible {
+  outline: 2px solid var(--warm);
+  outline-offset: 4px;
+}
+.topAction:active img { transform: translateY(0); }
+@media (max-width: 480px) {
+  .topAction img { height: 50px; }
+}
+
+
+/* ---------------- 中央档案区 ---------------- */
+.bookWrap {
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* 延伸研究线：档案后方，加载完成后一次性绘出，之后静止 */
+.researchLine {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity .8s ease;
+}
+.researchLine path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 2.6s cubic-bezier(.4, 0, .2, 1) .45s;
+}
+.is-ready .researchLine { opacity: .34; }
+.is-ready .researchLine path { stroke-dashoffset: 0; }
+.is-opening .researchLine { opacity: 0; transition: opacity .3s ease; }
+
+.bookPan {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  will-change: transform;
+}
+
+/* 缩放层：设计坐标 1203×1320，transform-origin 对准内页焦点（推近锚点 61% 52%）。
+   用 calc 补偿 origin 偏移，保证任意缩放档位下档案视觉中心始终在取景容器中心。 */
+.bookScale {
+  position: absolute;
+  width: var(--book-w);
+  height: var(--book-h);
+  left: calc(50% - 733.83px + (132.33px * var(--bs)) - var(--shiftX, 0px));
+  top: calc(50% - 686.4px + (26.4px * var(--bs)));
+  transform: scale(var(--bs));
+  transform-origin: 61% 52%;
+  opacity: 0;
+  transition: opacity .9s ease .15s;
+}
+.is-ready .bookScale { opacity: 1; }
+
+.book {
+  position: absolute;
+  inset: 0;
+  perspective: 1700px;
+}
+
+.book img { user-select: none; }
+
+/* 底册（内页）：left:0 top:0 */
+.bookBase {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1192px;
+  height: 1320px;
+}
+
+/* 封皮层：校准位置 left:0 top:-7px；围绕左侧装订边（约自身 15.8% 处）转开 */
+/* 封皮层 v2（2026-09-11 换图，带「AI 的加速度」题字）：
+   原图 992×1080、内容 bbox [54,0,967,1080]；按内容高度对齐底册（scale 1.1907），
+   内容左上角对齐 → left:-64px / top:20px；右侧露出底册纸边为预期效果。
+   装订绳柱约在自身 9% 处，作为转开旋转轴。 */
+.bookCover {
+  position: absolute;
+  left: -64px;
+  top: 20px;
+  width: 1181px;
+  height: 1286px;
+  transform-origin: 9% 50%;
+  will-change: transform, opacity;
+}
+.bookCover > img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 屏幕阅读器专用文本（封面题字已生成在封皮图内） */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 纸缝暖光：对准右下角卷角，screen 混合 + 呼吸 */
+.seamGlow {
+  position: absolute;
+  left: 650px;
+  top: 636px;
+  width: 680px;
+  mix-blend-mode: screen;
+  opacity: .3;
+  pointer-events: none;
+  animation: seamBreathe 4.8s ease-in-out infinite;
+}
+@keyframes seamBreathe {
+  0%, 100% { opacity: .26; }
+  50% { opacity: .46; }
+}
+
+/* 档案投影 */
+.bookShadow {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -64px;
+  height: 130px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, .5), transparent 68%);
+  z-index: -1;
+  transition: opacity .4s ease;
+}
+
+/* ---------------- 入口区 ---------------- */
+.entryZone {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 1.8vh, 16px);
+  padding-bottom: max(20px, 4.2vh);
+  opacity: 0;
+  transition: opacity .8s ease .4s;
+}
+.is-ready .entryZone { opacity: 1; }
+.is-opening .entryZone {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .28s ease, transform .28s ease;
+  pointer-events: none;
+}
+
+/* 入口局部暖光：悬停/聚焦时增强 */
+.entryGlow {
+  position: absolute;
+  left: 50%;
+  bottom: -12px;
+  width: min(420px, 70vw);
+  height: 150px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(255, 205, 120, .42), transparent 68%);
+  opacity: 0;
+  transition: opacity .35s ease;
+  pointer-events: none;
+}
+
+.entry {
+  position: relative;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  width: clamp(200px, 26vw, 300px);
+  aspect-ratio: 2172 / 724;
+  cursor: pointer;
+  transition: transform .28s cubic-bezier(.34, 1.4, .5, 1);
+}
+.entryPaper {
+  position: absolute;
+  inset: -9% -5%; /* 纸片毛边略微溢出按钮盒 */
+  width: 110%;
+  height: 118%;
+  user-select: none;
+}
+.entryLabel {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(18px, 1.7vw, 23px);
+  letter-spacing: .34em;
+  text-indent: .34em;
+  color: #43331d;
+  transform: translateY(-4%);
+}
+.entry:hover, .entry:focus-visible { transform: translateY(-5px) rotate(-.4deg); }
+.entryZone:has(.entry:hover) .entryGlow,
+.entryZone:has(.entry:focus-visible) .entryGlow { opacity: 1; }
+.entry:focus-visible {
+  outline: 2px solid var(--warm);
+  outline-offset: 7px;
+  border-radius: 4px;
+}
+.entry:active { transform: translateY(-2px) scale(.985); }
+.entry:disabled { cursor: default; }
+
+/* ---------------- 揭开转场 ---------------- */
+.neutralWipe {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: linear-gradient(158deg, #f0ede5 0%, var(--paper-neutral) 46%, #e3e0d7 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.is-opening .bookCover {
+  animation: coverOpen calc(var(--openDur) * .68) cubic-bezier(.45, .05, .25, 1) forwards;
+}
+@keyframes coverOpen {
+  0%   { transform: rotateY(0deg) translateZ(0); opacity: 1; }
+  35%  { transform: rotateY(-72deg) translateZ(70px); opacity: 1; }
+  70%  { opacity: .55; }
+  100% { transform: rotateY(-168deg) translateZ(40px); opacity: 0; }
+}
+
+.is-opening .bookScale {
+  animation: pushIn var(--openDur) cubic-bezier(.55, .06, .25, 1) calc(var(--openDur) * .08) forwards;
+}
+@keyframes pushIn {
+  from { transform: scale(var(--bs)); }
+  to   { transform: scale(calc(var(--bs) * var(--push))); }
+}
+
+.is-opening .seamGlow {
+  animation: seamFlare calc(var(--openDur) * .7) ease-out forwards;
+}
+@keyframes seamFlare {
+  0%   { opacity: .34; }
+  14%  { opacity: .8; }
+  60%  { opacity: .42; }
+  100% { opacity: 0; }
+}
+
+.is-opening .neutralWipe {
+  animation: neutralIn var(--openDur) linear forwards;
+}
+@keyframes neutralIn {
+  0%, 55% { opacity: 0; }
+  100%    { opacity: 1; }
+}
+
+.is-opening .bookShadow { opacity: 0; }
+.is-opening .topbar { opacity: 0; }
+
+/* ---------------- 降级（主素材加载失败） ---------------- */
+.fallbackCopy {
+  display: none;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 24px;
+}
+.fallbackCopy .title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(38px, 8vw, 72px);
+  letter-spacing: .08em;
+  color: var(--ink-cream);
+}
+.fallbackCopy .subtitle {
+  margin: 18px 0 0;
+  font-family: var(--font-serif);
+  font-size: clamp(16px, 3vw, 24px);
+  letter-spacing: .14em;
+  color: var(--ink-dim);
+}
+.degraded-book .bookScale { display: none; }
+.degraded-book .researchLine { display: none; }
+.degraded-book .fallbackCopy { display: block; }
+.degraded-entry .entry {
+  background: linear-gradient(160deg, #ead9b8, #d9c49a);
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .35);
+}
+.degraded-entry .entryPaper { display: none; }
+
+/* ---------------- 故事承接容器 ---------------- */
+.storyRoot {
+  position: relative;
+  z-index: 2;
+  min-height: 100dvh;
+  background: var(--paper-neutral);
+  color: var(--paper-ink);
+  font-family: var(--font-sans);
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.storyRoot.is-live { opacity: 1; }
+
+/* 中性打印纸上的浅格线（工作台描图纸感） */
+.storyFallback {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 48px 20px;
+  background-image:
+    linear-gradient(rgba(70, 90, 130, .07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(70, 90, 130, .07) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.paperCard {
+  width: min(560px, 92vw);
+  background: #fbfaf6;
+  border: 1px solid #d6d3c8;
+  border-radius: 4px;
+  box-shadow: 0 18px 50px rgba(35, 40, 55, .12), 0 2px 6px rgba(35, 40, 55, .08);
+  padding: clamp(28px, 5vw, 44px) clamp(24px, 5vw, 48px);
+}
+.cardTag {
+  margin: 0 0 14px;
+  font-size: 12px;
+  letter-spacing: .32em;
+  color: #8a867a;
+}
+.cardHeading {
+  margin: 0 0 14px;
+  font-family: var(--font-serif);
+  font-size: clamp(22px, 3.4vw, 30px);
+  letter-spacing: .04em;
+  color: #2e2c25;
+  outline: none;
+}
+.cardHeading:focus-visible { outline: 2px solid #2f5fd0; outline-offset: 6px; }
+.cardText {
+  margin: 0 0 12px;
+  font-size: 14.5px;
+  line-height: 1.9;
+  color: #55524a;
+}
+.cardText code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  background: #efede6;
+  border: 1px solid #ddd9cd;
+  border-radius: 3px;
+  padding: 1px 6px;
+}
+.cardStatus {
+  margin: 0 0 20px;
+  min-height: 1.6em;
+  font-size: 13px;
+  color: #8a6d3b;
+}
+.cardActions { display: flex; gap: 12px; flex-wrap: wrap; }
+.cardActions button {
+  border-radius: 3px;
+  padding: 10px 22px;
+  font-size: 14px;
+  letter-spacing: .08em;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.btnPrimary {
+  border: 1px solid #2f5fd0;
+  background: #2f5fd0;
+  color: #f6f4ee;
+}
+.btnPrimary:hover { background: #2853b8; }
+.btnGhost {
+  border: 1px solid #b9b5a7;
+  background: transparent;
+  color: #4c4940;
+}
+.btnGhost:hover { background: #f0eee7; }
+.cardActions button:focus-visible { outline: 2px solid #2f5fd0; outline-offset: 3px; }
+.cardActions button:active { transform: translateY(1px); }
+
+/* ---------------- 小高度横屏 ---------------- */
+@media (max-height: 480px) {
+  .topbar { padding-top: 8px; }
+  .brandLogo { height: 30px; }
+  .topAction img { height: 44px; }
+  .entryZone { gap: 7px; padding-bottom: 12px; }
+  .entry { width: clamp(150px, 22vw, 210px); }
+  .entryLabel { font-size: 16px; }
+}
+
+/* ---------------- 减少动态效果 ---------------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .seamGlow { animation: none; opacity: .3; }
+  .researchLine path { transition: none; stroke-dashoffset: 0; }
+  .is-ready .researchLine { transition: opacity .01s; }
+  .bookScale, .entryZone { transition-duration: .01s; transition-delay: 0s; }
+
+  /* 点击后不强迫观看动画：极短交叉淡入 */
+  .is-opening .bookCover { animation: reduceFade var(--openDur) linear forwards; }
+  .is-opening .bookScale { animation: none; }
+  .is-opening .seamGlow { animation: none; opacity: 0; }
+  @keyframes reduceFade { to { opacity: 0; } }
+}

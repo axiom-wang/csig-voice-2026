@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" fill="none" role="img" aria-label="手写：慢下来">
+  <!-- 第六幕「又有什么，值得慢下来？」核心词手写体：中线路径，pathLength=1 供描边生长动画。
+       快速连笔 + 轻微右倾；收尾处笔触放缓，与「所有笔迹慢下来」的收束节奏一致。 -->
+  <g stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="skewX(-4)">
+      <!-- 慢 -->
+      <g transform="rotate(-2 150 145)">
+        <path class="hw-stroke" style="--i:0" pathLength="1" d="M 70 104 C 63 114, 61 124, 64 129 C 73 119, 83 110, 93 105"/>
+        <path class="hw-stroke" style="--i:1" pathLength="1" d="M 80 82 C 78 128, 76 180, 73 226"/>
+        <path class="hw-stroke" style="--i:2" pathLength="1" d="M 129 63 C 153 58, 173 56, 181 60 C 180 76, 178 92, 175 106 C 157 106, 140 108, 126 111 C 125 95, 127 78, 129 63"/>
+        <path class="hw-stroke" style="--i:3" pathLength="1" d="M 122 123 C 155 116, 189 112, 203 117 C 201 132, 198 146, 193 157 C 168 155, 143 157, 121 161 C 120 148, 120 135, 122 123"/>
+        <path class="hw-stroke" style="--i:4" pathLength="1" d="M 149 125 C 147 135, 146 145, 145 153"/>
+        <path class="hw-stroke" style="--i:5" pathLength="1" d="M 173 121 C 171 131, 170 141, 169 149"/>
+        <path class="hw-stroke" style="--i:6" pathLength="1" d="M 126 180 C 159 171, 192 167, 202 172 C 195 191, 174 209, 144 224"/>
+        <path class="hw-stroke" style="--i:7" pathLength="1" d="M 158 179 C 178 197, 203 213, 230 223"/>
+      </g>
+      <!-- 下 -->
+      <g transform="rotate(1.2 380 150) translate(0 4)">
+        <path class="hw-stroke" style="--i:8" pathLength="1" d="M 322 90 C 364 82, 410 78, 440 84"/>
+        <path class="hw-stroke" style="--i:9" pathLength="1" d="M 379 88 C 377 132, 375 180, 371 224"/>
+        <path class="hw-stroke" style="--i:10" pathLength="1" stroke-width="7.5" d="M 398 118 C 410 126, 422 137, 430 149"/>
+      </g>
+      <!-- 来 -->
+      <g transform="rotate(-1.5 580 145) translate(0 -2)">
+        <path class="hw-stroke" style="--i:11" pathLength="1" d="M 526 92 C 568 84, 614 80, 648 86"/>
+        <path class="hw-stroke" style="--i:12" pathLength="1" d="M 586 60 C 584 106, 581 160, 576 216"/>
+        <path class="hw-stroke" style="--i:13" pathLength="1" d="M 550 106 C 542 114, 537 124, 539 131 C 552 122, 568 116, 584 113 C 602 109, 618 108, 630 112"/>
+        <path class="hw-stroke" style="--i:14" pathLength="1" d="M 514 144 C 562 134, 620 130, 658 137"/>
+        <path class="hw-stroke" style="--i:15" pathLength="1" d="M 576 156 C 560 176, 540 195, 512 209"/>
+        <path class="hw-stroke" style="--i:16" pathLength="1" d="M 590 157 C 610 179, 634 197, 662 207"/>
+      </g>
+    </g>
+  </g>
+</svg>

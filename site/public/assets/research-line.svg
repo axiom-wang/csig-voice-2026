@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" fill="none">
+<title>可绘制的延伸研究线</title>
+<path id="research-trail" pathLength="1" d="M 1110 180 C 1240 112 1424 162 1328 312 C 1292 382 1170 377 1184 470 C 1190 543 1402 578 1292 734 C 1246 798 1039 862 910 865 C 762 868 790 927 907 982" stroke="var(--tech, #426bcc)" stroke-width="2.5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+</svg>

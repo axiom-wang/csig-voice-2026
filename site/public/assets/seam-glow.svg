@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600">
+<title>纸缝局部暖光</title>
+<defs><radialGradient id="warm-seam"><stop stop-color="#fff4cd" stop-opacity=".8"/><stop offset=".25" stop-color="#ffd483" stop-opacity=".45"/><stop offset=".6" stop-color="#ed9c39" stop-opacity=".14"/><stop offset="1" stop-color="#ed9c39" stop-opacity="0"/></radialGradient></defs>
+<ellipse cx="200" cy="300" rx="110" ry="285" transform="rotate(25 200 300)" fill="url(#warm-seam)"/>
+</svg>

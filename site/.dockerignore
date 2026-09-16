@@ -1,0 +1,10 @@
+node_modules
+docs
+shots
+test-shots.py
+font-preview.html
+README.md
+.deploy-state.json
+.DS_Store
+deployignore
+.deployignore

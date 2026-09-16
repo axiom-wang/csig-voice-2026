@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 300" fill="none" role="img" aria-label="手写：来得及吗？">
+  <!-- 第一幕问题便签手写体：中线路径，pathLength=1 供描边生长动画。
+       快速连笔 + 整体右倾，模拟便签上的即时笔迹；
+       问号最后一笔（.hw-trail）向外延伸，成为贯穿全程的研究主线线头。 -->
+  <g stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="skewX(-5)">
+      <!-- 来 -->
+      <g transform="rotate(-2 140 145)">
+        <path class="hw-stroke" style="--i:0" pathLength="1" d="M 76 94 C 118 86, 164 82, 196 88"/>
+        <path class="hw-stroke" style="--i:1" pathLength="1" d="M 138 62 C 137 106, 133 160, 127 216"/>
+        <path class="hw-stroke" style="--i:2" pathLength="1" d="M 100 108 C 92 116, 87 126, 89 133 C 102 124, 118 118, 134 115 C 152 111, 168 110, 180 114"/>
+        <path class="hw-stroke" style="--i:3" pathLength="1" d="M 64 146 C 112 136, 170 132, 208 139"/>
+        <path class="hw-stroke" style="--i:4" pathLength="1" d="M 126 158 C 110 178, 90 197, 62 211"/>
+        <path class="hw-stroke" style="--i:5" pathLength="1" d="M 140 159 C 160 181, 184 199, 212 209"/>
+      </g>
+      <!-- 得 -->
+      <g transform="rotate(1.2 360 145) translate(0 5)">
+        <path class="hw-stroke" style="--i:6" pathLength="1" d="M 324 82 C 314 92, 304 104, 296 116"/>
+        <path class="hw-stroke" style="--i:7" pathLength="1" d="M 332 114 C 320 126, 308 140, 300 152 C 308 147, 314 143, 318 141 C 316 168, 313 196, 310 222"/>
+        <path class="hw-stroke" style="--i:8" pathLength="1" d="M 352 78 C 351 92, 350 108, 349 122"/>
+        <path class="hw-stroke" style="--i:9" pathLength="1" d="M 352 78 C 380 72, 402 70, 411 74 C 410 90, 408 106, 405 120"/>
+        <path class="hw-stroke" style="--i:10" pathLength="1" d="M 350 99 C 372 95, 392 93, 408 93"/>
+        <path class="hw-stroke" style="--i:11" pathLength="1" d="M 349 122 C 372 118, 392 116, 405 116"/>
+        <path class="hw-stroke" style="--i:12" pathLength="1" d="M 338 142 C 374 135, 420 131, 450 136"/>
+        <path class="hw-stroke" style="--i:13" pathLength="1" d="M 342 168 C 380 161, 426 157, 454 162"/>
+        <path class="hw-stroke" style="--i:14" pathLength="1" d="M 412 145 C 411 176, 408 202, 402 218 C 397 227, 388 227, 382 220"/>
+        <path class="hw-stroke" style="--i:15" pathLength="1" stroke-width="8" d="M 364 188 q 9 10 11 18"/>
+      </g>
+      <!-- 及 -->
+      <g transform="rotate(-1 590 140) translate(0 -6)">
+        <path class="hw-stroke" style="--i:16" pathLength="1" d="M 578 76 C 568 102, 554 130, 538 154"/>
+        <path class="hw-stroke" style="--i:17" pathLength="1" d="M 582 78 C 612 71, 638 72, 641 83 C 635 97, 613 105, 598 111 C 612 118, 618 128, 611 144 C 601 166, 580 187, 556 203"/>
+        <path class="hw-stroke" style="--i:18" pathLength="1" d="M 600 126 C 622 152, 646 176, 676 195"/>
+      </g>
+      <!-- 吗 -->
+      <g transform="rotate(1.8 810 140) translate(0 3)">
+        <path class="hw-stroke" style="--i:19" pathLength="1" d="M 733 106 C 749 101, 764 99, 772 103 C 771 120, 769 138, 765 153 C 752 154, 740 155, 730 157 C 729 140, 731 121, 733 106"/>
+        <path class="hw-stroke" style="--i:20" pathLength="1" d="M 804 70 C 832 63, 860 60, 870 65 C 867 81, 862 97, 856 111"/>
+        <path class="hw-stroke" style="--i:21" pathLength="1" d="M 804 72 C 802 94, 799 116, 795 137 C 822 130, 854 125, 870 130 C 872 152, 865 181, 850 197 C 843 204, 832 203, 824 196"/>
+        <path class="hw-stroke" style="--i:22" pathLength="1" d="M 786 176 C 822 165, 860 159, 890 162"/>
+      </g>
+      <!-- ？ -->
+      <g transform="rotate(-2.5 1000 130)">
+        <path class="hw-stroke" style="--i:23" pathLength="1" d="M 962 94 C 966 66, 998 54, 1022 67 C 1042 79, 1040 104, 1023 119 C 1007 133, 994 143, 992 163"/>
+        <path class="hw-stroke" style="--i:24" pathLength="1" stroke-width="8" d="M 991 188 q 5 11 -1 19"/>
+      </g>
+    </g>
+    <!-- 问号尾笔：向外延伸，接入研究主线 -->
+    <path class="hw-stroke hw-trail" style="--i:25" pathLength="1" d="M 992 208 C 1030 222, 1100 224, 1170 214 C 1240 204, 1310 184, 1376 158"/>
+  </g>
+</svg>

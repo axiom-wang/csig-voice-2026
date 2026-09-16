@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>字体方案预览 · CSIG 正发声 · AI 的加速度</title>
+<link rel="stylesheet" href="./assets/fonts/fonts.css">
+<style>
+  :root {
+    --font-serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    --font-sans: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    --ink-archive: #3a3126;
+    --ink-lab: #2e2c25;
+    --paper-archive: #f2e9d5;
+    --paper-lab: #efede7;
+    --tech: #426bcc;
+    --edit: #b3352b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background: #20242e;
+    color: #e8e4da;
+    line-height: 1.7;
+  }
+  .page { max-width: 1080px; margin: 0 auto; padding: 56px 24px 96px; }
+  header.pageHead { margin-bottom: 48px; }
+  .pageHead .kicker {
+    font-family: var(--font-year); font-size: 12px; letter-spacing: .28em;
+    color: #9aa3b8; text-transform: uppercase;
+  }
+  .pageHead h1 {
+    margin: 12px 0 10px;
+    font-family: var(--font-serif); font-weight: 900; font-size: clamp(28px, 4vw, 44px);
+    letter-spacing: .06em; color: #f0ead9;
+  }
+  .pageHead p { margin: 0; max-width: 46em; color: #b8b2a2; font-size: 15px; }
+
+  section { margin-top: 56px; }
+  .secLabel {
+    display: flex; align-items: baseline; gap: 14px;
+    font-family: var(--font-year); font-size: 12px; letter-spacing: .24em; color: #8f97ac;
+  }
+  .secLabel::after { content: ""; flex: 1; height: 1px; background: #3a4050; }
+  .secTitle { font-family: var(--font-serif); font-weight: 700; font-size: 22px; color: #e6dfcc; margin: 14px 0 4px; letter-spacing: .04em; }
+  .secNote { font-size: 13.5px; color: #a29a88; margin: 0 0 22px; max-width: 52em; }
+
+  /* ---------- 双主题纸面 ---------- */
+  .paperRow { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 760px) { .paperRow { grid-template-columns: 1fr; } }
+  .paper {
+    border-radius: 6px; padding: 30px 30px 26px; position: relative;
+    box-shadow: 0 18px 44px rgba(0,0,0,.35);
+  }
+  .paper.archive { background: var(--paper-archive); color: var(--ink-archive); }
+  .paper.lab {
+    background: var(--paper-lab); color: var(--ink-lab);
+    background-image: linear-gradient(rgba(70,90,130,.07) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(70,90,130,.07) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .paper .tag {
+    font-family: var(--font-year); font-size: 11px; letter-spacing: .22em;
+    opacity: .55; margin-bottom: 16px;
+  }
+  .sampleTitle { margin: 0 0 6px; font-family: var(--font-serif); font-weight: 900; font-size: 30px; letter-spacing: .05em; }
+  .sampleBody { margin: 0 0 18px; font-family: var(--font-serif); font-size: 15.5px; opacity: .85; }
+  .lab .sampleTitle, .lab .sampleBody { font-family: var(--font-sans); }
+  .lab .sampleTitle { font-weight: 700; letter-spacing: .02em; }
+  .note { display: block; transform: rotate(-1.2deg); margin: 10px 0 4px; }
+  .note.ink { font-family: var(--font-note-ink); font-size: 24px; color: #4a3a22; }
+  .note.pencil { font-family: var(--font-note-pencil); font-size: 24px; color: #3c3a33; }
+  .note.urgent { font-family: var(--font-note-urgent); font-size: 26px; color: var(--edit); transform: rotate(1.4deg); }
+  .noteRole { font-family: var(--font-year); font-size: 10.5px; letter-spacing: .18em; opacity: .45; }
+
+  /* ---------- 年代字体加速带 ---------- */
+  .eraBand { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 760px) { .eraBand { grid-template-columns: 1fr 1fr; } }
+  .era {
+    background: #2a2f3c; border: 1px solid #3a4050; border-radius: 6px;
+    padding: 20px 18px 16px; min-height: 150px;
+    display: flex; flex-direction: column; justify-content: space-between; gap: 14px;
+  }
+  .era .yr { font-family: var(--font-year); font-size: 13px; letter-spacing: .12em; color: #9aa3b8; }
+  .era .show { font-size: 19px; line-height: 1.5; color: #ece7d8; }
+  .era.e1956 .show { font-family: var(--font-era-typewriter); }
+  .era.e2017 .show { font-family: var(--font-era-paper); }
+  .era.e2017 .show em { font-style: italic; }
+  .era.e2026 .show { font-family: var(--font-era-launch); font-weight: 500; }
+  .era .role { font-size: 11.5px; color: #8a8fa0; letter-spacing: .06em; }
+  .era.dense .show { letter-spacing: -.01em; }
+
+  /* ---------- 手写 SVG ---------- */
+  .hwRow { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  .hwCard {
+    background: #f6f1e2; border-radius: 6px; padding: 26px 30px;
+    box-shadow: 0 18px 44px rgba(0,0,0,.35); color: #33302a;
+  }
+  .hwCard svg { width: 100%; height: auto; display: block; }
+  .hwCard .meta { display: flex; justify-content: space-between; align-items: baseline; margin-top: 14px; gap: 12px; flex-wrap: wrap; }
+  .hwCard .use { font-size: 12.5px; color: #6d675a; }
+  .hwCard .use code { font-family: var(--font-year); font-size: 11px; background: #e9e2cf; padding: 1px 6px; border-radius: 3px; }
+  .replay {
+    border: 1px solid #b9b2a0; background: transparent; color: #4c4940;
+    font-size: 12px; letter-spacing: .12em; padding: 6px 14px; border-radius: 3px; cursor: pointer;
+  }
+  .replay:hover { background: #ece5d2; }
+
+  footer { margin-top: 72px; font-size: 12.5px; color: #7d8496; }
+  footer code { font-family: var(--font-year); font-size: 11px; color: #a6adc0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="pageHead">
+    <div class="kicker">CSIG 正发声 · AI 的加速度 — Font System</div>
+    <h1>字体方案预览</h1>
+    <p>原则：不拿一款"像手写"的字体包打全场；真正关键的词做成 SVG 手写；字体随年代切换，让排版本身参与"加速度"。字库均已按站点文案子集化（详见 <code>assets/fonts/README.md</code>）。</p>
+  </header>
+
+  <!-- ============ 1. 双主题标题/正文/批注 ============ -->
+  <section>
+    <div class="secLabel">01 · 双主题</div>
+    <h2 class="secTitle">历史线衬线 vs 当前线无衬线，批注三级速度</h2>
+    <p class="secNote">历史线：古籍衬线标题 + 研究者毛笔批注（从容）。当前线：系统无衬线 + 铅笔随写批注（快）；第五幕追问升级为潦草红批（更急）——批注字体本身在加速。</p>
+    <div class="paperRow">
+      <div class="paper archive">
+        <div class="tag">历史线 · MAGICAL ARCHIVE</div>
+        <h3 class="sampleTitle">一个问题，可以研究很多年</h3>
+        <p class="sampleBody">最初，我们问：机器能拥有智能吗？人们开始认真追问：机器能不能思考？</p>
+        <span class="note ink">划掉重来——此路不通，再试。</span>
+        <span class="noteRole">墨批 · Ma Shan Zheng（--font-note-ink）</span>
+      </div>
+      <div class="paper lab">
+        <div class="tag">当前线 · PRODUCT LAB</div>
+        <h3 class="sampleTitle">我快了，要求也快了</h3>
+        <p class="sampleBody">过去要做几天，现在可以先跑一版。我刚学会的，正在变成新的要求。</p>
+        <span class="note pencil">客户想先看 Demo，来得及吗？</span>
+        <span class="noteRole">铅笔批注 · Long Cang（--font-note-pencil）</span><br>
+        <span class="note urgent">交付提前！优势是什么？</span>
+        <span class="noteRole">压力批注 · Zhi Mang Xing（--font-note-urgent）</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. 年代字体 ============ -->
+  <section>
+    <div class="secLabel">02 · 年代加速度</div>
+    <h2 class="secTitle">同一条研究线，四个年代的字体</h2>
+    <p class="secNote">世界层旁注按年代换字体：1956 打字机 → 2012–2017 学术衬线 → 2022–2026 科技无衬线；年份刻度统一用等宽数字，密度递增呼应时间轴"先疏后密"。</p>
+    <div class="eraBand">
+      <div class="era e1956">
+        <div class="yr">1956</div>
+        <div class="show">Dartmouth Workshop<br>“Artificial Intelligence”</div>
+        <div class="role">打字机 · Special Elite（--font-era-typewriter）</div>
+      </div>
+      <div class="era e2017">
+        <div class="yr">2012 — 2017</div>
+        <div class="show">AlexNet · AlphaGo<br><em>Attention Is All You Need</em></div>
+        <div class="role">学术衬线 · EB Garamond（--font-era-paper）</div>
+      </div>
+      <div class="era e2026 dense">
+        <div class="yr">2022.11 — 2025.03</div>
+        <div class="show">ChatGPT · 腾讯混元<br>Hunyuan 3D 2.0</div>
+        <div class="role">科技无衬线 · Space Grotesk（--font-era-launch）</div>
+      </div>
+      <div class="era e2026">
+        <div class="yr">2026.03</div>
+        <div class="show">WorkBuddy 上线</div>
+        <div class="role">年代数字 · IBM Plex Mono（--font-year）</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. SVG 手写关键词 ============ -->
+  <section>
+    <div class="secLabel">03 · 关键词手写（非字体）</div>
+    <h2 class="secTitle">真正关键的词，逐笔写出来</h2>
+    <p class="secNote">每个词是独立 SVG 中线路径（<code>pathLength=1</code>），按笔画序号 <code>--i</code> 依次描边生长；「来得及吗？」的问号尾笔（<code>.hw-trail</code>）向外延伸，接入第一幕贯穿全程的研究主线。</p>
+    <div class="hwRow">
+      <div class="hwCard">
+        <svg id="hw1" class="hw-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 300" fill="none" role="img" aria-label="手写：来得及吗？">
+          <g stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="skewX(-5)">
+              <g transform="rotate(-2 140 145)">
+                <path class="hw-stroke" style="--i:0" pathLength="1" d="M 76 94 C 118 86, 164 82, 196 88"/>
+                <path class="hw-stroke" style="--i:1" pathLength="1" d="M 138 62 C 137 106, 133 160, 127 216"/>
+                <path class="hw-stroke" style="--i:2" pathLength="1" d="M 100 108 C 92 116, 87 126, 89 133 C 102 124, 118 118, 134 115 C 152 111, 168 110, 180 114"/>
+                <path class="hw-stroke" style="--i:3" pathLength="1" d="M 64 146 C 112 136, 170 132, 208 139"/>
+                <path class="hw-stroke" style="--i:4" pathLength="1" d="M 126 158 C 110 178, 90 197, 62 211"/>
+                <path class="hw-stroke" style="--i:5" pathLength="1" d="M 140 159 C 160 181, 184 199, 212 209"/>
+              </g>
+              <g transform="rotate(1.2 360 145) translate(0 5)">
+                <path class="hw-stroke" style="--i:6" pathLength="1" d="M 324 82 C 314 92, 304 104, 296 116"/>
+                <path class="hw-stroke" style="--i:7" pathLength="1" d="M 332 114 C 320 126, 308 140, 300 152 C 308 147, 314 143, 318 141 C 316 168, 313 196, 310 222"/>
+                <path class="hw-stroke" style="--i:8" pathLength="1" d="M 352 78 C 351 92, 350 108, 349 122"/>
+                <path class="hw-stroke" style="--i:9" pathLength="1" d="M 352 78 C 380 72, 402 70, 411 74 C 410 90, 408 106, 405 120"/>
+                <path class="hw-stroke" style="--i:10" pathLength="1" d="M 350 99 C 372 95, 392 93, 408 93"/>
+                <path class="hw-stroke" style="--i:11" pathLength="1" d="M 349 122 C 372 118, 392 116, 405 116"/>
+                <path class="hw-stroke" style="--i:12" pathLength="1" d="M 338 142 C 374 135, 420 131, 450 136"/>
+                <path class="hw-stroke" style="--i:13" pathLength="1" d="M 342 168 C 380 161, 426 157, 454 162"/>
+                <path class="hw-stroke" style="--i:14" pathLength="1" d="M 412 145 C 411 176, 408 202, 402 218 C 397 227, 388 227, 382 220"/>
+                <path class="hw-stroke" style="--i:15" pathLength="1" stroke-width="8" d="M 364 188 q 9 10 11 18"/>
+              </g>
+              <g transform="rotate(-1 590 140) translate(0 -6)">
+                <path class="hw-stroke" style="--i:16" pathLength="1" d="M 578 76 C 568 102, 554 130, 538 154"/>
+                <path class="hw-stroke" style="--i:17" pathLength="1" d="M 582 78 C 612 71, 638 72, 641 83 C 635 97, 613 105, 598 111 C 612 118, 618 128, 611 144 C 601 166, 580 187, 556 203"/>
+                <path class="hw-stroke" style="--i:18" pathLength="1" d="M 600 126 C 622 152, 646 176, 676 195"/>
+              </g>
+              <g transform="rotate(1.8 810 140) translate(0 3)">
+                <path class="hw-stroke" style="--i:19" pathLength="1" d="M 733 106 C 749 101, 764 99, 772 103 C 771 120, 769 138, 765 153 C 752 154, 740 155, 730 157 C 729 140, 731 121, 733 106"/>
+                <path class="hw-stroke" style="--i:20" pathLength="1" d="M 804 70 C 832 63, 860 60, 870 65 C 867 81, 862 97, 856 111"/>
+                <path class="hw-stroke" style="--i:21" pathLength="1" d="M 804 72 C 802 94, 799 116, 795 137 C 822 130, 854 125, 870 130 C 872 152, 865 181, 850 197 C 843 204, 832 203, 824 196"/>
+                <path class="hw-stroke" style="--i:22" pathLength="1" d="M 786 176 C 822 165, 860 159, 890 162"/>
+              </g>
+              <g transform="rotate(-2.5 1000 130)">
+                <path class="hw-stroke" style="--i:23" pathLength="1" d="M 962 94 C 966 66, 998 54, 1022 67 C 1042 79, 1040 104, 1023 119 C 1007 133, 994 143, 992 163"/>
+                <path class="hw-stroke" style="--i:24" pathLength="1" stroke-width="8" d="M 991 188 q 5 11 -1 19"/>
+              </g>
+            </g>
+            <path class="hw-stroke hw-trail" style="--i:25" pathLength="1" d="M 992 208 C 1030 222, 1100 224, 1170 214 C 1240 204, 1310 184, 1376 158"/>
+          </g>
+        </svg>
+        <div class="meta">
+          <span class="use">第一幕问题便签 / 第七幕回归 · <code>assets/handwriting/laidejima.svg</code></span>
+          <button class="replay" data-target="hw1" type="button">重新书写</button>
+        </div>
+      </div>
+      <div class="hwCard">
+        <svg id="hw2" class="hw-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" fill="none" role="img" aria-label="手写：慢下来">
+          <g stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="skewX(-4)">
+              <g transform="rotate(-2 150 145)">
+                <path class="hw-stroke" style="--i:0" pathLength="1" d="M 70 104 C 63 114, 61 124, 64 129 C 73 119, 83 110, 93 105"/>
+                <path class="hw-stroke" style="--i:1" pathLength="1" d="M 80 82 C 78 128, 76 180, 73 226"/>
+                <path class="hw-stroke" style="--i:2" pathLength="1" d="M 129 63 C 153 58, 173 56, 181 60 C 180 76, 178 92, 175 106 C 157 106, 140 108, 126 111 C 125 95, 127 78, 129 63"/>
+                <path class="hw-stroke" style="--i:3" pathLength="1" d="M 122 123 C 155 116, 189 112, 203 117 C 201 132, 198 146, 193 157 C 168 155, 143 157, 121 161 C 120 148, 120 135, 122 123"/>
+                <path class="hw-stroke" style="--i:4" pathLength="1" d="M 149 125 C 147 135, 146 145, 145 153"/>
+                <path class="hw-stroke" style="--i:5" pathLength="1" d="M 173 121 C 171 131, 170 141, 169 149"/>
+                <path class="hw-stroke" style="--i:6" pathLength="1" d="M 126 180 C 159 171, 192 167, 202 172 C 195 191, 174 209, 144 224"/>
+                <path class="hw-stroke" style="--i:7" pathLength="1" d="M 158 179 C 178 197, 203 213, 230 223"/>
+              </g>
+              <g transform="rotate(1.2 380 150) translate(0 4)">
+                <path class="hw-stroke" style="--i:8" pathLength="1" d="M 322 90 C 364 82, 410 78, 440 84"/>
+                <path class="hw-stroke" style="--i:9" pathLength="1" d="M 379 88 C 377 132, 375 180, 371 224"/>
+                <path class="hw-stroke" style="--i:10" pathLength="1" stroke-width="7.5" d="M 398 118 C 410 126, 422 137, 430 149"/>
+              </g>
+              <g transform="rotate(-1.5 580 145) translate(0 -2)">
+                <path class="hw-stroke" style="--i:11" pathLength="1" d="M 526 92 C 568 84, 614 80, 648 86"/>
+                <path class="hw-stroke" style="--i:12" pathLength="1" d="M 586 60 C 584 106, 581 160, 576 216"/>
+                <path class="hw-stroke" style="--i:13" pathLength="1" d="M 550 106 C 542 114, 537 124, 539 131 C 552 122, 568 116, 584 113 C 602 109, 618 108, 630 112"/>
+                <path class="hw-stroke" style="--i:14" pathLength="1" d="M 514 144 C 562 134, 620 130, 658 137"/>
+                <path class="hw-stroke" style="--i:15" pathLength="1" d="M 576 156 C 560 176, 540 195, 512 209"/>
+                <path class="hw-stroke" style="--i:16" pathLength="1" d="M 590 157 C 610 179, 634 197, 662 207"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+        <div class="meta">
+          <span class="use">第六幕「值得慢下来」核心词 · <code>assets/handwriting/manxialai.svg</code></span>
+          <button class="replay" data-target="hw2" type="button">重新书写</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    字库文件：<code>site/assets/fonts/*.woff2</code>（子集化，合计约 1.4MB）· 手写 SVG：<code>site/assets/handwriting/*.svg</code> · token 与描边动画：<code>assets/fonts/fonts.css</code>
+  </footer>
+</div>
+
+<script>
+  document.querySelectorAll(".replay").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var svg = document.getElementById(btn.dataset.target);
+      svg.classList.remove("hw-play");
+      void svg.getBoundingClientRect();
+      svg.classList.add("hw-play");
+    });
+  });
+</script>
+</body>
+</html>

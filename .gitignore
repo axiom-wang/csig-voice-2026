@@ -1,0 +1,24 @@
+# 系统文件
+.DS_Store
+
+# 中间产物（613M，不进仓库）
+output/
+废弃/
+
+# 对话档案（敏感，不进仓库）
+CodeBuddy对话全记录.md
+CSIG正发声·对话档案.md
+
+# 部署与工具本地状态
+.env
+.edgeone/
+.wrangler/
+.page-deliver/
+.codebuddy/
+.tef_dist/
+site/.deploy-state.json
+site/.deployignore
+
+# 站点本地开发产物（截图等）
+site/shots/
+site/test-shots.py

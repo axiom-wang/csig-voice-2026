@@ -1,0 +1,152 @@
+/* ============================================================
+   CSIG 正发声 · AI 的加速度 —— 字体资产与 token 系统
+   方案文档见同目录 README.md。
+
+   设计原则：
+   1. 不用一款"像手写"的字体包打全场——按内容角色分配字体。
+   2. 真正关键的词不用字体，用 SVG 手写（assets/handwriting/）。
+   3. 字体随年代切换，让排版本身参与"加速度"叙事：
+      1956 打字机 → 2012–2017 学术衬线 → 2022–2026 科技无衬线；
+      批注从研究者毛笔（慢）→ 铅笔随写（快）→ 潦草追问（更急）。
+   ============================================================ */
+
+/* ---------------- @font-face（全部已按站点文案子集化） ---------------- */
+
+/* 历史线·古籍标题与档案正文（变量字重 400–900） */
+@font-face {
+  font-family: "Noto Serif SC";
+  src: url("./NotoSerifSC.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 历史线·研究者墨批（毛笔，从容） */
+@font-face {
+  font-family: "Ma Shan Zheng";
+  src: url("./MaShanZheng.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 当前线·铅笔批注（硬笔，随意） */
+@font-face {
+  font-family: "Long Cang";
+  src: url("./LongCang.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 当前线·压力批注（潦草，急切；第五幕客户追问/交付提前） */
+@font-face {
+  font-family: "Zhi Mang Xing";
+  src: url("./ZhiMangXing.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 1956·打字机（会议记录、早期终端） */
+@font-face {
+  font-family: "Special Elite";
+  src: url("./SpecialElite.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 2012–2017·学术衬线（论文题名） */
+@font-face {
+  font-family: "EB Garamond";
+  src: url("./EBGaramond.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "EB Garamond";
+  src: url("./EBGaramond-Italic.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* 2022–2026·科技无衬线（产品名：ChatGPT / Hunyuan / WorkBuddy） */
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("./SpaceGrotesk.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 贯穿·年代数字（时间轴刻度与事件日期） */
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("./IBMPlexMono.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("./IBMPlexMono-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------------- 字体 token（角色 × 年代） ---------------- */
+
+:root {
+  /* 双主题标题/正文：styles.css 中 --font-serif（历史）与 --font-sans（当前）已就位 */
+
+  /* 手写批注：三级速度 */
+  --font-note-ink: "Ma Shan Zheng", "Kaiti SC", "STKaiti", "KaiTi", cursive;
+  --font-note-pencil: "Long Cang", "Kaiti SC", "STKaiti", "KaiTi", cursive;
+  --font-note-urgent: "Zhi Mang Xing", "Ma Shan Zheng", "Kaiti SC", cursive;
+
+  /* 年代拉丁字体：排版参与加速度 */
+  --font-era-typewriter: "Special Elite", "Courier New", ui-monospace, monospace; /* 1956 */
+  --font-era-paper: "EB Garamond", "Times New Roman", serif;                      /* 2012–2017 */
+  --font-era-launch: "Space Grotesk", system-ui, sans-serif;                      /* 2022–2026 */
+  --font-year: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;   /* 时间轴/日期数字 */
+}
+
+/* ---------------- 配套排版规则（供画卷直接使用） ---------------- */
+
+/* 历史旁注：年份、模型名、论文名（世界层，可略读） */
+.type-era-1956 { font-family: var(--font-era-typewriter); letter-spacing: .02em; }
+.type-era-paper { font-family: var(--font-era-paper); letter-spacing: .01em; }
+.type-era-launch { font-family: var(--font-era-launch); letter-spacing: .015em; }
+.type-year { font-family: var(--font-year); font-feature-settings: "tnum" 1; letter-spacing: .04em; }
+
+/* 手写批注三级 */
+.type-note-ink { font-family: var(--font-note-ink); }
+.type-note-pencil { font-family: var(--font-note-pencil); }
+.type-note-urgent { font-family: var(--font-note-urgent); }
+
+/* ---------------- SVG 手写关键词描边生长 ----------------
+   关键词不做成字体：每个词是独立 SVG（assets/handwriting/），
+   笔画为中线路径，pathLength=1，--i 为笔画序号，尾笔 .hw-trail 单独控制。 */
+.hw-stroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.hw-play .hw-stroke {
+  animation: hwDraw .55s cubic-bezier(.5, .1, .4, 1) forwards;
+  animation-delay: calc(var(--i, 0) * 120ms);
+}
+.hw-play .hw-trail {
+  animation-duration: 1.4s;
+  animation-timing-function: cubic-bezier(.3, .7, .3, 1);
+}
+@keyframes hwDraw {
+  to { stroke-dashoffset: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hw-stroke { stroke-dashoffset: 0; }
+  .hw-play .hw-stroke { animation: none; }
+}

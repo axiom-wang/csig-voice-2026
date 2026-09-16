@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN" class="cover-lock">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<title>CSIG 正发声 · AI 的加速度</title>
+<meta name="description" content="CSIG 正发声「AI 的加速度」叙事探索预热：一本等待揭开的档案。">
+<link rel="preload" href="assets/fonts/NotoSerifSC.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="./story/story.css">
+</head>
+<body>
+
+<!-- ============ 封面（首页） ============ -->
+<main class="coverRoot" id="coverRoot" aria-label="CSIG 正发声 · AI 的加速度 活动封面">
+  <h1 class="sr-only">AI 的加速度</h1>
+
+  <!-- 背景层：不透明深蓝黑桌面，铺满视口，周边碎纸允许裁切 -->
+  <div class="bg" aria-hidden="true">
+    <img src="assets/background.png" alt="" id="bgImg" draggable="false">
+  </div>
+
+  <!-- 顶栏：左侧品牌，右侧活动入口 -->
+  <header class="topbar">
+    <div class="brand">
+      <img class="brandLogo" src="assets/brand-logo.png" alt="CSIG 正发声" draggable="false">
+    </div>
+    <nav class="topActions" aria-label="活动入口">
+      <a class="topAction" href="https://csig.lexiangla.com/lives/72f68d36a5c111f1817f4e743b115340?company_from=csig" target="_blank" rel="noopener">
+        <img src="assets/btn-live.png" alt="预约直播" draggable="false">
+      </a>
+      <a class="topAction" href="https://csig.lexiangla.com/teams/k100059/events/e69c6a3aab2f11f1930d1ef02f5a8c04?company_from=csig" target="_blank" rel="noopener">
+        <img src="assets/btn-onsite.png" alt="现场报名" draggable="false">
+      </a>
+    </nav>
+  </header>
+
+  <!-- 中央档案区：取景容器（JS 计算整体缩放） -->
+  <div class="bookWrap" id="bookWrap">
+    <!-- 可选延伸研究线：内联自 assets/research-line.svg，铺在档案后方，避免与封面蓝绳重叠 -->
+    <svg class="researchLine" viewBox="0 0 1600 1000" fill="none" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+      <path id="researchTrail" pathLength="1"
+        d="M 1110 180 C 1240 112 1424 162 1328 312 C 1292 382 1170 377 1184 470 C 1190 543 1402 578 1292 734 C 1246 798 1039 862 910 865 C 762 868 790 927 907 982"
+        stroke="var(--tech, #426bcc)" stroke-width="2.5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+    </svg>
+
+    <!-- 视差层（桌面指针小幅度视差） -->
+    <div class="bookPan" id="bookPan">
+      <!-- 缩放层：设计坐标系 1203×1320（底册自然尺寸），整体缩放适配视口 -->
+      <div class="bookScale" id="bookScale">
+        <div class="book" id="book">
+          <!-- 底册：内页（校准：left 0 / top 0，1192×1320） -->
+          <img class="bookBase" id="baseImg" src="assets/archive-base.png" alt="一本厚档案的内页" draggable="false">
+
+          <!-- 封皮层：校准后覆盖底册（v2 带题字，校准参数见 styles.css 注释），围绕左侧装订边转开 -->
+          <div class="bookCover" id="bookCover">
+            <img src="assets/archive-cover-v2.png" alt="封面印有「AI 的加速度」的厚档案" id="coverImg" draggable="false">
+          </div>
+
+          <!-- 纸缝暖光：叠在右下角卷角处，控制强度，禁止大面积过曝 -->
+          <img class="seamGlow" id="seamGlow" src="assets/seam-glow.svg" alt="" aria-hidden="true" draggable="false">
+
+          <!-- 档案投影（打开时淡出） -->
+          <div class="bookShadow" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 降级文案：主素材加载失败时保证品牌与标题可读 -->
+    <div class="fallbackCopy" id="fallbackCopy">
+      <h1 class="title">AI 的加速度</h1>
+    </div>
+  </div>
+
+  <!-- 下方入口区：入口在档案下方，不压住档案 -->
+  <div class="entryZone" id="entryZone">
+    <div class="entryGlow" aria-hidden="true"></div>
+    <button class="entry" id="entryButton" type="button" aria-label="翻开看看，进入 AI 的加速度故事">
+      <img class="entryPaper" src="assets/entry-paper.png" alt="" aria-hidden="true" draggable="false">
+      <span class="entryLabel">翻开看看</span>
+    </button>
+  </div>
+
+  <!-- 揭开转场的暖色→中性纸面过渡层 -->
+  <div class="neutralWipe" aria-hidden="true"></div>
+</main>
+
+<!-- ============ 七幕画卷挂载点 ============ -->
+<section class="storyRoot" id="storyRoot" hidden aria-hidden="true" aria-labelledby="storyHeading">
+  <!-- 通过 window.mountCsigStory 挂载；加载失败时保留下面的重试入口 -->
+  <div class="storyMount" id="storyMount"></div>
+
+  <!-- 画卷未就绪占位：明确反馈，不进入空白页 -->
+  <div class="storyFallback" id="storyFallback" hidden>
+    <div class="paperCard">
+      <p class="cardTag">CSIG 正发声 · AI 的加速度</p>
+      <h2 class="cardHeading" id="storyHeading" tabindex="-1">画卷暂未展开</h2>
+      <p class="cardText">
+        正在准备这段纸面旅程。你可以重试加载，或先返回封面。
+      </p>
+      <p class="cardStatus" id="mountStatus" role="status" aria-live="polite"></p>
+      <div class="cardActions">
+        <button class="btnPrimary" id="retryMount" type="button">重试挂载</button>
+        <button class="btnGhost" id="backToCover" type="button">返回封面</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="./main.js"></script>
+<script src="./story/data.js"></script>
+<script src="./story/core.js"></script>
+<script src="./story/world.js"></script>
+<script src="./story/morph.js"></script>
+<script src="./story/seams.js"></script>
+<script src="./story/screen.js"></script>
+<script src="./story/story.js"></script>
+</body>
+</html>
